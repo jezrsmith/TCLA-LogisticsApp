@@ -22,6 +22,10 @@
             <ion-label position="floating">Bu Name Rcv</ion-label>
             <ion-input type="text" formControlName="buNameRcv" readonly></ion-input>
         </ion-item>
+        <ion-item>
+            <ion-label>Unload Date</ion-label>
+            <ion-datetime displayFormat="D MMM YYYY H:mm" formControlName="unloadDate" [max]="now" [min]="minDate"></ion-datetime>
+        </ion-item>
         <ion-item-sliding #csmNoSliding>
             <ion-item slot="start">
                 <ion-label position="floating">CSM No</ion-label>
@@ -30,7 +34,6 @@
                     <ion-icon slot="icon-only" name="barcode"></ion-icon>
                 </ion-button>
             </ion-item>
-
         </ion-item-sliding>
         <ion-item>
             <ion-label position="floating">Seal No</ion-label>

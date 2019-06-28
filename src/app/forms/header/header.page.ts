@@ -8,6 +8,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import { IonItemSliding } from '@ionic/angular';
 import {BarcodePage} from '../../barcode/barcode.page';
 import {Attachment} from '../../models/attachment';
+import {min} from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -25,14 +26,25 @@ export class HeaderPage implements OnInit {
   attachments: Attachment[];
   outAttachments: Attachment[];
   attachReady = false;
+  now = new Date().toISOString();
+  minDate;
 
   constructor(public navCtrl: IonNav, public navParams: NavParams, private formBuilder: FormBuilder, private sanitizer: DomSanitizer) {
     this.passedData = this.navParams.get('data') ? this.navParams.get('data') : {};
     this.initdata = this.passedData.formData;
+    if (!this.initdata.unloadDate) {
+      this.initdata.unloadDate = this.now;
+    }
+    const today = new Date();
+    const newdate = new Date();
+    newdate.setDate(today.getDate() - 30);
+    this.minDate = newdate.toISOString();
+
     this.headerFg = this.formBuilder.group({
       buCodeRcv: [this.initdata.buCodeRcv],
       buTypeRcv: [this.initdata.buTypeRcv],
       buNameRcv: [this.initdata.buNameRcv],
+      unloadDate: [this.initdata.unloadDate],
       csmNo: [this.initdata.csmNo, Validators.required],
       sealNo: [this.initdata.sealNo],
       slTime: [this.initdata.slTime]
