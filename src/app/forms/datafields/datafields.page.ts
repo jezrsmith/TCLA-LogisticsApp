@@ -4,7 +4,7 @@ import {Barcode} from '../../models/barcode';
 import {Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-photo',
+  selector: 'app-datafields',
   templateUrl: 'datafields.page.html',
   styleUrls: ['datafields.page.scss']
 })

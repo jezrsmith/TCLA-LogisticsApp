@@ -6,7 +6,7 @@ import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
 import {throwError} from 'rxjs';
 
 @Component({
-  selector: 'app-photo',
+  selector: 'app-qrcode',
   templateUrl: 'qrcode.page.html',
   styleUrls: ['qrcode.page.scss']
 })

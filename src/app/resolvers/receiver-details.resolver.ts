@@ -1,12 +1,12 @@
 /* Used to resolve the receiver info for an email address */
 
 import { Injectable } from '@angular/core';
-import {Resolve} from '@angular/router';
+import {Resolve, Router, RouterStateSnapshot} from '@angular/router';
 import {ReceiverInfo} from '../models/receiver';
 import {TcOrganizationService} from '../services/tc-organization.service';
 import {of} from 'rxjs/internal/observable/of';
 import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {flatMap} from 'rxjs/internal/operators';
 import {LogisticsService} from '../services/logistics.service';
 
@@ -16,7 +16,7 @@ export const CLIENT_ID_KEY = 'tcs-login-client-id';
 @Injectable()
 export class ReceiverDetailsResolver implements Resolve<ReceiverInfo> {
 
-  constructor(private orgService: TcOrganizationService, private logisticsService: LogisticsService) {}
+  constructor(private orgService: TcOrganizationService, private logisticsService: LogisticsService, private router: Router) {}
 
   resolve(): Observable<ReceiverInfo> {
     return this.orgService.getClaimsNative().pipe(
@@ -38,6 +38,11 @@ export class ReceiverDetailsResolver implements Resolve<ReceiverInfo> {
                 return receiver;
               })
           );
+        }),
+        catchError(error => {
+            console.error(error);
+            this.router.navigate(['/login'], {});
+            return of(new ReceiverInfo());
         })
     );
   }

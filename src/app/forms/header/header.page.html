@@ -80,4 +80,5 @@
         </ion-item-sliding>
         <!--ion-button expand="full" size="large" type="submit" [disabled]="!dataFg.valid">Save</ion-button-->
     </form>
+    <app-attachments *ngIf="attachReady" [attachments]="attachments" (attachmentsChanges)="handleAttachmentsChange($event)"></app-attachments>
 </ion-content>

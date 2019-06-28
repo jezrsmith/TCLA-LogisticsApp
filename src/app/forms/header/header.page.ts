@@ -7,30 +7,52 @@ import {PhotoPage} from '../../photo/photo.page';
 import {DomSanitizer} from '@angular/platform-browser';
 import { IonItemSliding } from '@ionic/angular';
 import {BarcodePage} from '../../barcode/barcode.page';
+import {Attachment} from '../../models/attachment';
 
 @Component({
-  selector: 'app-photo',
+  selector: 'app-header',
   templateUrl: 'header.page.html',
   styleUrls: ['header.page.scss']
 })
 export class HeaderPage implements OnInit {
   private headerFg: FormGroup;
   private initdata: any;
+  private passedData: any;
   public truckNoPhoto: any;
   public preUnloadPhoto: any;
   private photoPageComponent = PhotoPage;
   private barcodePageComponent = BarcodePage;
+  attachments: Attachment[];
+  outAttachments: Attachment[];
+  attachReady = false;
 
   constructor(public navCtrl: IonNav, public navParams: NavParams, private formBuilder: FormBuilder, private sanitizer: DomSanitizer) {
-    this.initdata = this.navParams.get('data') ? this.navParams.get('data') : {};
+    this.passedData = this.navParams.get('data') ? this.navParams.get('data') : {};
+    this.initdata = this.passedData.formData;
     this.headerFg = this.formBuilder.group({
       buCodeRcv: [this.initdata.buCodeRcv],
       buTypeRcv: [this.initdata.buTypeRcv],
       buNameRcv: [this.initdata.buNameRcv],
       csmNo: [this.initdata.csmNo, Validators.required],
       sealNo: [this.initdata.sealNo],
-      slTime: [this.initdata.slTime],
+      slTime: [this.initdata.slTime]
     });
+    if (this.passedData.preUnloadPhoto) {
+      this.preUnloadPhoto = this.passedData.preUnloadPhoto.file;
+    }
+    if (this.passedData.truckNoPhoto) {
+      this.truckNoPhoto = this.passedData.truckNoPhoto.file;
+    }
+    if (this.passedData.files && this.passedData.files.length > 0) {
+      this.attachments = this.passedData.files;
+    } else {
+      this.attachments = [];
+    }
+    this.attachReady = true;
+  }
+
+  handleAttachmentsChange = (attachments) => {
+    this.outAttachments = attachments;
   }
 
   photoCallback = data => {
@@ -68,7 +90,28 @@ export class HeaderPage implements OnInit {
   }
 
   public passData() {
-      this.navParams.get('callback')(this.headerFg.value);
+      const files: Attachment[] = [ ...this.outAttachments ];
+      let truckNoPhotoAttach: Attachment;
+      if (this.truckNoPhoto) {
+        truckNoPhotoAttach = new Attachment().deserialize(
+            {
+              type: 'photo',
+              file: this.truckNoPhoto,
+              description: 'LU_Number'
+            }
+        );
+      }
+      let preUnloadPhotoAttach: Attachment;
+      if (this.preUnloadPhoto) {
+        preUnloadPhotoAttach = new Attachment().deserialize(
+            {
+              type: 'photo',
+              file: this.truckNoPhoto,
+              description: 'LU_Number'
+            }
+        );
+      }
+      this.navParams.get('callback')({ formData: this.headerFg.value, files, truckNoPhoto: truckNoPhotoAttach, preUnloadPhoto: preUnloadPhotoAttach });
   }
 
   ngOnInit(): void {

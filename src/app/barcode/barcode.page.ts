@@ -11,7 +11,7 @@ import {IonNav, NavController, NavParams} from '@ionic/angular';
 import {Barcode} from '../models/barcode';
 
 @Component({
-  selector: 'app-photo',
+  selector: 'app-barcode',
   templateUrl: 'barcode.page.html',
   styleUrls: ['barcode.page.scss']
 })
