@@ -1,0 +1,21 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Datafields
+        </ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<form *ngIf="!hide" [formGroup]="dataFg" (ngSubmit)="submitForm()">
+    <ion-item>
+        <ion-label position="floating">Description</ion-label>
+        <ion-input type="text" formControlName="Description" required></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">More Info</ion-label>
+        <ion-textarea formControlName="MoreInfo" required></ion-textarea>
+    </ion-item>
+    <ion-button expand="full" size="large" type="submit" [disabled]="!dataFg.valid">Save</ion-button>
+</form>

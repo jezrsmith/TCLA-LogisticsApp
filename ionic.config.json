@@ -1,7 +1,8 @@
 {
   "name": "capApp",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }

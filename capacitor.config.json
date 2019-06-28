@@ -1,7 +1,10 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "capApp",
+  "appId": "com.tibco.js.capapp",
+  "appName": "CapApp",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "www"
+  "webDir": "www",
+  "server": {
+    "url": "http://192.168.2.2:8100"
+  }
 }

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {TcLoginService} from '../services/tc-login.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-tabs',
@@ -7,6 +9,15 @@ import { Component } from '@angular/core';
 })
 export class TabsPage {
 
-  constructor() {}
+  constructor(private tcLogin: TcLoginService, private router: Router, private route: ActivatedRoute) {}
+
+  public logout() {
+    const logout$ = this.tcLogin.logout();
+    logout$.subscribe(
+        next => {
+          this.router.navigate(['login'], {queryParams: {}});
+        }
+    );
+  }
 
 }

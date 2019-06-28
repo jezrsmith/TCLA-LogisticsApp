@@ -1,0 +1,83 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Header
+        </ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button (click)="passData()" defaultHref="/"></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <form [formGroup]="headerFg">
+        <ion-item>
+            <ion-label position="floating">Bu Code Rcv</ion-label>
+            <ion-input type="text" formControlName="buCodeRcv" readonly></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Bu Type Rcv</ion-label>
+            <ion-input type="text" formControlName="buTypeRcv" readonly></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Bu Name Rcv</ion-label>
+            <ion-input type="text" formControlName="buNameRcv" readonly></ion-input>
+        </ion-item>
+        <ion-item-sliding #csmNoSliding>
+            <ion-item slot="start">
+                <ion-label position="floating">CSM No</ion-label>
+                <ion-input  type="text" formControlName="csmNo" required></ion-input>
+                <ion-button slot="end" fill="clear" (click)="openScanner('csmNo')">
+                    <ion-icon slot="icon-only" name="barcode"></ion-icon>
+                </ion-button>
+            </ion-item>
+
+        </ion-item-sliding>
+        <ion-item>
+            <ion-label position="floating">Seal No</ion-label>
+            <ion-input type="text" formControlName="sealNo" required></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">SL Time</ion-label>
+            <ion-input type="text" formControlName="slTime" readonly></ion-input>
+        </ion-item>
+        <ion-item-sliding #truckNoSliding>
+            <ion-item-options side="start">
+                <!--ion-item-option *ngIf="truckNoPhoto" (click)="openPhoto('truckNoPhoto', truckNoSliding);this.close()">Replace</ion-item-option-->
+                <ion-item-option *ngIf="truckNoPhoto" color="danger"
+                                 (click)="clearImage('truckNoPhoto', truckNoSliding);">Clear
+                </ion-item-option>
+            </ion-item-options>
+            <ion-item text-wrap>
+                <ion-thumbnail (click)="openPhoto('truckNoPhoto')" *ngIf="truckNoPhoto" slot="end">
+                    <img *ngIf="truckNoPhoto" [src]="truckNoPhoto">
+                </ion-thumbnail>
+                <ion-button *ngIf="!truckNoPhoto" slot="end" fill="clear" (click)="openPhoto('truckNoPhoto')">
+                    <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+                </ion-button>
+                <ion-label>
+                    Truck Number
+                </ion-label>
+            </ion-item>
+        </ion-item-sliding>
+        <ion-item-sliding #preUnloadSliding>
+            <ion-item-options side="start">
+                <!--ion-item-option *ngIf="truckNoPhoto" (click)="openPhoto('truckNoPhoto', truckNoSliding);this.close()">Replace</ion-item-option-->
+                <ion-item-option *ngIf="preUnloadPhoto" color="danger"
+                                 (click)="clearImage('preUnloadPhoto', preUnloadSliding);">Clear
+                </ion-item-option>
+            </ion-item-options>
+            <ion-item text-wrap>
+                <ion-thumbnail (click)="openPhoto('preUnloadPhoto')" *ngIf="preUnloadPhoto" slot="end">
+                    <img *ngIf="preUnloadPhoto" [src]="preUnloadPhoto">
+                </ion-thumbnail>
+                <ion-button *ngIf="!preUnloadPhoto" slot="end" fill="clear" (click)="openPhoto('preUnloadPhoto')">
+                    <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+                </ion-button>
+                <ion-label>
+                    Loading Unit - Pre Unload
+                </ion-label>
+            </ion-item>
+        </ion-item-sliding>
+        <!--ion-button expand="full" size="large" type="submit" [disabled]="!dataFg.valid">Save</ion-button-->
+    </form>
+</ion-content>
