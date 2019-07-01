@@ -1,0 +1,67 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Header
+        </ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button (click)="passData()" defaultHref="/"></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <form [formGroup]="articleFG">
+        <ion-item>
+            <ion-searchbar #articleSearchbar [placeholder]="'Item Number'" debounce="500" [value]="searchTerm" (ionChange)="searchItems($event)"></ion-searchbar>
+            <ion-button slot="end" fill="clear" (click)="openScanner('itemNo')">
+                <ion-icon slot="icon-only" name="barcode"></ion-icon>
+            </ion-button>
+        </ion-item>
+        <div *ngIf="articleSearchbar.value">
+            <ion-list>
+                <ion-item *ngFor="let article of articleItems" (click)="selectArticle(article)">{{article.itemNo}} - {{article.itemName}}</ion-item>
+            </ion-list>
+        </div>
+        <div *ngIf="!articleSearchbar.value">
+            <div *ngIf="articleFG.get('itemNo').value">
+                <ion-item slot="start">
+                    <ion-label position="floating">Article Number</ion-label>
+                    <ion-input  type="text" formControlName="itemNo" readonly></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Article Name</ion-label>
+                    <ion-input type="text" formControlName="itemName" readonly></ion-input>
+                </ion-item>
+            </div>
+            <ion-item>
+                <ion-label position="floating">Bu Type Rcv</ion-label>
+                <ion-input type="text" formControlName="buCodeSup" readonly></ion-input>
+            </ion-item>
+        </div>
+        <!--ion-item>
+            <ion-label position="floating">Bu Name Rcv</ion-label>
+            <ion-input type="text" formControlName="buNameRcv" readonly></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Unload Date</ion-label>
+            <ion-datetime displayFormat="D MMM YYYY H:mm" formControlName="unloadDate" [max]="now" [min]="minDate"></ion-datetime>
+        </ion-item>
+        <ion-item-sliding #csmNoSliding>
+            <ion-item slot="start">
+                <ion-label position="floating">CSM No</ion-label>
+                <ion-input  type="text" formControlName="csmNo" required></ion-input>
+                <ion-button slot="end" fill="clear" (click)="openScanner('csmNo')">
+                    <ion-icon slot="icon-only" name="barcode"></ion-icon>
+                </ion-button>
+            </ion-item>
+        </ion-item-sliding>
+        <ion-item>
+            <ion-label position="floating">Seal No</ion-label>
+            <ion-input type="text" formControlName="sealNo" required></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">SL Time</ion-label>
+            <ion-input type="text" formControlName="slTime" readonly></ion-input>
+        </ion-item-->
+    </form>
+    <app-attachments *ngIf="attachReady && !articleSearchbar.value" [attachments]="attachments" (attachmentsChanges)="handleAttachmentsChange($event)"></app-attachments>
+</ion-content>

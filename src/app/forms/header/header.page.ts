@@ -23,6 +23,7 @@ export class HeaderPage implements OnInit {
   public preUnloadPhoto: any;
   private photoPageComponent = PhotoPage;
   private barcodePageComponent = BarcodePage;
+  private valid = false;
   attachments: Attachment[];
   outAttachments: Attachment[];
   attachReady = false;
@@ -102,7 +103,7 @@ export class HeaderPage implements OnInit {
   }
 
   public passData() {
-      const files: Attachment[] = [ ...this.outAttachments ];
+      const files: Attachment[] = this.outAttachments ? [ ...this.outAttachments ] : [];
       let truckNoPhotoAttach: Attachment;
       if (this.truckNoPhoto) {
         truckNoPhotoAttach = new Attachment().deserialize(
@@ -123,7 +124,8 @@ export class HeaderPage implements OnInit {
             }
         );
       }
-      this.navParams.get('callback')({ formData: this.headerFg.value, files, truckNoPhoto: truckNoPhotoAttach, preUnloadPhoto: preUnloadPhotoAttach });
+      this.valid = true;
+      this.navParams.get('callback')({ formData: this.headerFg.value, files, truckNoPhoto: truckNoPhotoAttach, preUnloadPhoto: preUnloadPhotoAttach, valid: this.valid });
   }
 
   ngOnInit(): void {

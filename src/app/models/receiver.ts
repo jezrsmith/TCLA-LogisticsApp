@@ -17,3 +17,5 @@ export class ReceiverInfo implements Deserializable {
         return this;
     }
 }
+
+

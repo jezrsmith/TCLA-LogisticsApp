@@ -12,6 +12,7 @@ import {DatafieldsPage} from '../forms/datafields/datafields.page';
 import {ReceiverDetailsResolver} from '../resolvers/receiver-details.resolver';
 import {HeaderPage} from '../forms/header/header.page';
 import {AttachmentsPage} from '../attachments/attachments.page';
+import {ArticlePage} from '../forms/article/article.page';
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import {AttachmentsPage} from '../attachments/attachments.page';
   providers: [
       ReceiverDetailsResolver
   ],
-  declarations: [Tab1Page, PhotoPage, BarcodePage, QrcodePage, DatafieldsPage, HeaderPage, AttachmentsPage, CreateflowComponent],
-  entryComponents: [PhotoPage, BarcodePage, QrcodePage, DatafieldsPage, HeaderPage, AttachmentsPage, CreateflowComponent]
+  declarations: [Tab1Page, PhotoPage, BarcodePage, QrcodePage, DatafieldsPage, HeaderPage, ArticlePage, AttachmentsPage, CreateflowComponent],
+  entryComponents: [PhotoPage, BarcodePage, QrcodePage, DatafieldsPage, HeaderPage, ArticlePage, AttachmentsPage, CreateflowComponent]
 })
 export class Tab1PageModule {}
