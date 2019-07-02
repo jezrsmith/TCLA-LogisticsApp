@@ -1,7 +1,7 @@
 <ion-header>
     <ion-toolbar>
         <ion-title>
-            Header
+            Article
         </ion-title>
         <ion-buttons slot="start">
             <ion-back-button (click)="passData()" defaultHref="/"></ion-back-button>
@@ -10,32 +10,84 @@
 </ion-header>
 <ion-content>
     <form [formGroup]="articleFG">
+        <ion-list>
         <ion-item>
-            <ion-searchbar #articleSearchbar [placeholder]="'Item Number'" debounce="500" [value]="searchTerm" (ionChange)="searchItems($event)"></ion-searchbar>
+            <ion-searchbar #articleSearchbar [placeholder]="'Item Number'" debounce="500" [value]="searchTerm"
+                           (ionChange)="searchItems($event)" type="number"></ion-searchbar>
             <ion-button slot="end" fill="clear" (click)="openScanner('itemNo')">
                 <ion-icon slot="icon-only" name="barcode"></ion-icon>
             </ion-button>
         </ion-item>
         <div *ngIf="articleSearchbar.value">
             <ion-list>
-                <ion-item *ngFor="let article of articleItems" (click)="selectArticle(article)">{{article.itemNo}} - {{article.itemName}}</ion-item>
+                <ion-item *ngFor="let article of articleItems" (click)="selectArticle(article)">{{article.itemNo}}
+                    - {{article.itemName}}</ion-item>
             </ion-list>
         </div>
         <div *ngIf="!articleSearchbar.value">
             <div *ngIf="articleFG.get('itemNo').value">
                 <ion-item slot="start">
                     <ion-label position="floating">Article Number</ion-label>
-                    <ion-input  type="text" formControlName="itemNo" readonly></ion-input>
+                    <ion-input type="text" formControlName="itemNo" readonly></ion-input>
                 </ion-item>
                 <ion-item>
                     <ion-label position="floating">Article Name</ion-label>
                     <ion-input type="text" formControlName="itemName" readonly></ion-input>
                 </ion-item>
+                <ion-item *ngIf="selectedArticle && selectedArticle.suppliers">
+                    <ion-label position="floating">Supplier</ion-label>
+                    <ion-select placeholder="Select One" formControlName="buCodeSup">
+                        <ion-select-option *ngFor="let supplier of selectedArticle.suppliers"
+                                           value="supplier.buCodeSup">{{supplier.buCodeSup}}
+                            - {{supplier.buNameSup}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Qty Dispatch</ion-label>
+                    <ion-input type="text" formControlName="itemQtyDsp" type="number"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Qty Rcv Good</ion-label>
+                    <ion-input type="text" formControlName="itemQtyRcvGood" type="number"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Qty Rcv Damaged</ion-label>
+                    <ion-input type="text" formControlName="itemQtyRcvDamaged" type="number"></ion-input>
+                </ion-item>
+                <ion-item *ngIf="articleFG.get('itemQtyRcvGood').value && articleFG.get('itemQtyRcvGood').value">
+                    <ion-label position="floating">Qty Diff</ion-label>
+                    <ion-input type="text" formControlName="itemQtyDiff" [value]="calcQtyDiff()" readonly></ion-input>
+                </ion-item>
+                <ion-item *ngIf="damageTypes">
+                    <ion-label position="floating">Damage Type</ion-label>
+                    <ion-select placeholder="Select One" formControlName="damageType">
+                        <ion-select-option *ngFor="let damageType of damageTypes"
+                                           [value]="damageType.damageTypeCode">{{damageType.damageTypeCode}}
+                            - {{damageType.damageTypeDescription}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item *ngIf="nonComplianceCategories">
+                    <ion-label position="floating">Non Compliance Category</ion-label>
+                    <ion-select placeholder="Select One" formControlName="nonComplianceCategory"
+                                (ionChange)="selectNonComplianceCategory($event)">
+                        <ion-select-option *ngFor="let nonComplianceCategory of nonComplianceCategories"
+                                           [value]="nonComplianceCategory.nonCompCategoryCode">{{nonComplianceCategory.nonCompCategoryCode}}
+                            - {{nonComplianceCategory.nonCompCategoryDescription}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                    <ion-item *ngIf="nonComplianceCodes">
+                        <ion-label position="floating">Non Compliance Code</ion-label>
+                        <ion-select placeholder="Select One" formControlName="nonComplianceCode" (ionChange)="selectNonComplianceCode($event)">
+                            <ion-select-option *ngFor="let nonComplianceCode of nonComplianceCodes"
+                                               [value]="nonComplianceCode.nonCompCode">{{nonComplianceCode.nonCompCode}}
+                                - {{nonComplianceCode.nonCompCodeName}}</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                <ion-item *ngIf="articleFG.get('nonComplianceCodeDescription').value">
+                    <ion-label position="floating">Compliance Code Details</ion-label>
+                    <ion-textarea autoGrow="true" formControlName="nonComplianceCodeDescription" readonly></ion-textarea>
+                </ion-item>
             </div>
-            <ion-item>
-                <ion-label position="floating">Bu Type Rcv</ion-label>
-                <ion-input type="text" formControlName="buCodeSup" readonly></ion-input>
-            </ion-item>
         </div>
         <!--ion-item>
             <ion-label position="floating">Bu Name Rcv</ion-label>
@@ -62,6 +114,8 @@
             <ion-label position="floating">SL Time</ion-label>
             <ion-input type="text" formControlName="slTime" readonly></ion-input>
         </ion-item-->
+        </ion-list>
     </form>
-    <app-attachments *ngIf="attachReady && !articleSearchbar.value" [attachments]="attachments" (attachmentsChanges)="handleAttachmentsChange($event)"></app-attachments>
+    <app-attachments *ngIf="attachReady && !articleSearchbar.value && articleFG.get('itemNo').value" [attachments]="attachments"
+                     (attachmentsChanges)="handleAttachmentsChange($event)"></app-attachments>
 </ion-content>

@@ -10,7 +10,7 @@ import {BarcodePage} from '../../barcode/barcode.page';
 import {Attachment} from '../../models/attachment';
 import {min} from 'rxjs/operators';
 import {LogisticsService} from '../../services/logistics.service';
-import {ArticleInfo} from '../../models/article';
+import {ArticleInfo, DamageType, NonComplianceCategory, NonComplianceCode} from '../../models/article';
 
 @Component({
   selector: 'app-header',
@@ -27,7 +27,13 @@ export class ArticlePage implements OnInit {
   private valid = false;
   private index: number;
   private searchTerm: string;
+  public selectedArticle: ArticleInfo;
   public articleItems: ArticleInfo[] = [];
+  public damageTypes: DamageType[];
+  public nonComplianceCategories: NonComplianceCategory[];
+  public nonComplianceCodes: NonComplianceCode[];
+  public selectedCodeDescription: string;
+  public showCodeDescription = false;
   attachments: Attachment[];
   outAttachments: Attachment[];
   attachReady = false;
@@ -39,7 +45,14 @@ export class ArticlePage implements OnInit {
     this.articleFG = this.formBuilder.group({
       itemNo: [this.initdata.itemNo],
       itemName: [this.initdata.itemName],
-      buCodeSup: [this.initdata.buCodeSup]
+      buCodeSup: [this.initdata.buCodeSup],
+      itemQtyDsp: [this.initdata.itemQtyDsp],
+      itemQtyRcvGood: [this.initdata.itemQtyRcvGood],
+      itemQtyRcvDamaged: [this.initdata.itemQtyRcvDamaged],
+      damageType: [this.initdata.damageType],
+      nonComplianceCategory: [this.initdata.nonComplianceCategory],
+      nonComplianceCode: [this.initdata.nonComplianceCode],
+      nonComplianceCodeDescription: [this.initdata.nonComplianceCodeDescription]
     });
     if (this.passedData.files && this.passedData.files.length > 0) {
       this.attachments = this.passedData.files;
@@ -76,7 +89,11 @@ export class ArticlePage implements OnInit {
         this.logisticsService.getArticleDetailsByNumberNative(Number(scannedData.text))
             .subscribe(
                 next => {
-                  this.articleFG.get('itemName').setValue(next[0].itemName);
+                  if (next[0]) {
+                    this.selectArticle(next[0]);
+                  } else {
+                    alert('Item not found: ' + scannedData.text);
+                  }
                 }
             );
       }
@@ -117,14 +134,66 @@ export class ArticlePage implements OnInit {
     }
   }
 
-  public selectArticle(article) {
-    console.log('Selected: ', article);
-    this.articleFG.get('itemNo').setValue(article.itemNo);
-    this.articleFG.get('itemName').setValue(article.itemName);
-    this.articleItems.length = 0;
-    this.articleSearchbar.value = undefined;
+  public selectArticle(article: ArticleInfo) {
+    // get supplier info
+    this.logisticsService.getSuppliersForArticleNative(article.itemNo)
+        .subscribe(
+            next => {
+              console.log('Suppliers: ', next);
+              this.selectedArticle = article;
+              this.selectedArticle.suppliers = next;
+              this.articleFG.get('itemNo').setValue(article.itemNo);
+              this.articleFG.get('itemName').setValue(article.itemName);
+              this.articleItems.length = 0;
+              this.articleSearchbar.value = undefined;
+            }
+        );
+  }
+
+  public calcQtyDiff() {
+    const insp = this.articleFG.get('itemQtyRcvGood').value + this.articleFG.get('itemQtyRcvDamaged').value;
+    const despatched = this.articleFG.get('itemQtyDsp').value;
+    if (despatched && despatched > 0) {
+      return (insp - despatched);
+    } else {
+      return 0;
+    }
+  }
+
+  public selectNonComplianceCategory(event) {
+    // get non comp code
+      this.logisticsService.getNonComplianceCodeNative(event.target.value)
+        .subscribe(
+            next => {
+              this.nonComplianceCodes = next;
+              this.articleFG.get('nonComplianceCodeDescription').setValue(undefined);
+            }
+        );
+  }
+
+  public selectNonComplianceCode(event) {
+      console.log('selected: ', event.target.value);
+      console.log('coice: ', this.nonComplianceCodes);
+      const complCode = this.nonComplianceCodes.find(code => code.nonCompCode === event.target.value );
+      console.log('setting code desc to: ', complCode.nonCompCodeDescription);
+      this.articleFG.get('nonComplianceCodeDescription').setValue(complCode.nonCompCodeDescription);
   }
 
   ngOnInit(): void {
+    // get damage types
+    this.logisticsService.getDamageTypeNative(-1)
+        .subscribe(
+            next => {
+              this.damageTypes = next;
+            }
+        );
+
+    // get non compliance categories
+    this.logisticsService.getNonComplianceCatNative(-1)
+        .subscribe(
+            next => {
+              this.nonComplianceCategories = next;
+            }
+        );
   }
 }
