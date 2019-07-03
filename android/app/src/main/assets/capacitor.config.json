@@ -1,0 +1,7 @@
+{
+  "appId": "com.tibco.js.capapp",
+  "appName": "CapApp",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}

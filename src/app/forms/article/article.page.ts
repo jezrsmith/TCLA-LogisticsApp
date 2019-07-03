@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {IonNav, IonSearchbar, NavController, NavParams} from '@ionic/angular';
 import {Barcode} from '../../models/barcode';
-import {Validators, FormBuilder, FormGroup } from '@angular/forms';
+import {Validators, FormBuilder, FormGroup, ValidatorFn, ValidationErrors} from '@angular/forms';
 import {validate} from 'codelyzer/walkerFactory/walkerFn';
 import {PhotoPage} from '../../photo/photo.page';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -12,6 +12,19 @@ import {min} from 'rxjs/operators';
 import {LogisticsService} from '../../services/logistics.service';
 import {ArticleInfo, DamageType, NonComplianceCategory, NonComplianceCode} from '../../models/article';
 
+import { AbstractControl } from '@angular/forms';
+
+export const nonComplianceCategoryValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null =>  {
+    console.log('validate start');
+    // nonCompliance category is mandatory if Qty Rcv Damage is 0 and Qty Diff is 0. Else optional.
+    const itemQtyRcvDamaged = control.get('itemQtyRcvDamaged');
+    const itemQtyDiff = control.get('itemQtyDiff');
+    const nonComplianceCategory = control.get('nonComplianceCategory');
+    const nonComplianceCode = control.get('nonComplianceCode');
+    console.log('validate start:', itemQtyRcvDamaged, itemQtyDiff, nonComplianceCategory);
+    return (itemQtyRcvDamaged && itemQtyDiff && (itemQtyRcvDamaged.value === 0 && itemQtyDiff.value === 0) && (!nonComplianceCategory.value || !nonComplianceCode.value)) ? { nonCompCatRequired: true } : null;
+}
+
 @Component({
   selector: 'app-header',
   templateUrl: 'article.page.html',
@@ -19,7 +32,7 @@ import {ArticleInfo, DamageType, NonComplianceCategory, NonComplianceCode} from 
 })
 export class ArticlePage implements OnInit {
   @ViewChild('articleSearchbar') articleSearchbar: IonSearchbar;
-  private articleFG: FormGroup;
+  private articleFg: FormGroup;
   private initdata: any;
   private passedData: any;
   private photoPageComponent = PhotoPage;
@@ -42,18 +55,20 @@ export class ArticlePage implements OnInit {
     this.passedData = this.navParams.get('data') ? this.navParams.get('data') : {};
     this.initdata = this.passedData.formData;
     this.index = this.passedData.index;
-    this.articleFG = this.formBuilder.group({
-      itemNo: [this.initdata.itemNo],
-      itemName: [this.initdata.itemName],
-      buCodeSup: [this.initdata.buCodeSup],
-      itemQtyDsp: [this.initdata.itemQtyDsp],
-      itemQtyRcvGood: [this.initdata.itemQtyRcvGood],
-      itemQtyRcvDamaged: [this.initdata.itemQtyRcvDamaged],
+    this.articleFg = this.formBuilder.group({
+      itemNo: [this.initdata.itemNo, Validators.required],
+      itemName: [this.initdata.itemName, Validators.required],
+      buCodeSup: [this.initdata.buCodeSup, Validators.required],
+      itemQtyDsp: [this.initdata.itemQtyDsp, Validators.required],
+      itemQtyRcvGood: [this.initdata.itemQtyRcvGood, Validators.required],
+      itemQtyRcvDamaged: [this.initdata.itemQtyRcvDamaged, Validators.required],
+      itemQtyDiff: [this.initdata.itemQtyDiff],
       damageType: [this.initdata.damageType],
       nonComplianceCategory: [this.initdata.nonComplianceCategory],
       nonComplianceCode: [this.initdata.nonComplianceCode],
-      nonComplianceCodeDescription: [this.initdata.nonComplianceCodeDescription]
-    });
+      nonComplianceCodeDescription: [this.initdata.nonComplianceCodeDescription],
+      slMinutes: [this.initdata.slMinutes]
+    }, { validators: nonComplianceCategoryValidator });
     if (this.passedData.files && this.passedData.files.length > 0) {
       this.attachments = this.passedData.files;
     } else {
@@ -84,7 +99,7 @@ export class ArticlePage implements OnInit {
 
   scannerCallback = (attribName: string, scannedData: Barcode) => {
     if (scannedData.cancelled !== 1) {
-      this.articleFG.get(attribName).setValue(scannedData.text);
+      this.articleFg.get(attribName).setValue(scannedData.text);
       if (attribName === 'itemNo') {
         this.logisticsService.getArticleDetailsByNumberNative(Number(scannedData.text))
             .subscribe(
@@ -115,8 +130,7 @@ export class ArticlePage implements OnInit {
   public passData() {
       const files: Attachment[] = this.outAttachments ? [ ...this.outAttachments ] : [];
       this.valid = true;
-      this.navParams.get('callback')({ formData: this.articleFG.value, files, valid: this.valid, index: this.index });
-      console.log('sending:', this.index, this.articleFG.value);
+      this.navParams.get('callback')({ formData: this.articleFg.value, files, index: this.index, valid: this.articleFg.valid });
   }
 
   public searchItems(event) {
@@ -142,8 +156,8 @@ export class ArticlePage implements OnInit {
               console.log('Suppliers: ', next);
               this.selectedArticle = article;
               this.selectedArticle.suppliers = next;
-              this.articleFG.get('itemNo').setValue(article.itemNo);
-              this.articleFG.get('itemName').setValue(article.itemName);
+              this.articleFg.get('itemNo').setValue(article.itemNo);
+              this.articleFg.get('itemName').setValue(article.itemName);
               this.articleItems.length = 0;
               this.articleSearchbar.value = undefined;
             }
@@ -151,13 +165,19 @@ export class ArticlePage implements OnInit {
   }
 
   public calcQtyDiff() {
-    const insp = this.articleFG.get('itemQtyRcvGood').value + this.articleFG.get('itemQtyRcvDamaged').value;
-    const despatched = this.articleFG.get('itemQtyDsp').value;
-    if (despatched && despatched > 0) {
-      return (insp - despatched);
+    console.log('checking qty diff');
+    const itemQtyRcvGood = this.articleFg.get('itemQtyRcvGood');
+    const itemQtyRcvDamaged = this.articleFg.get('itemQtyRcvDamaged');
+    const itemQtyDsp =  this.articleFg.get('itemQtyDsp');
+    if (itemQtyRcvGood && itemQtyRcvGood.value !== undefined && itemQtyRcvDamaged && itemQtyRcvDamaged.value !== undefined && itemQtyDsp && itemQtyDsp.value !== undefined) {
+        const insp = itemQtyRcvGood.value + itemQtyRcvDamaged.value;
+        this.articleFg.get('itemQtyDiff').setValue(insp - itemQtyDsp.value);
+        console.log('checking - set to: ', insp - itemQtyDsp.value);
     } else {
-      return 0;
+        console.log('checking - not setting');
+        console.log('checking: ', itemQtyRcvGood.value, itemQtyRcvDamaged.value, itemQtyDsp.value);
     }
+
   }
 
   public selectNonComplianceCategory(event) {
@@ -166,7 +186,8 @@ export class ArticlePage implements OnInit {
         .subscribe(
             next => {
               this.nonComplianceCodes = next;
-              this.articleFG.get('nonComplianceCodeDescription').setValue(undefined);
+              this.articleFg.get('nonComplianceCodeDescription').setValue(undefined);
+              this.articleFg.get('nonComplianceCode').setValue(undefined);
             }
         );
   }
@@ -176,7 +197,7 @@ export class ArticlePage implements OnInit {
       console.log('coice: ', this.nonComplianceCodes);
       const complCode = this.nonComplianceCodes.find(code => code.nonCompCode === event.target.value );
       console.log('setting code desc to: ', complCode.nonCompCodeDescription);
-      this.articleFG.get('nonComplianceCodeDescription').setValue(complCode.nonCompCodeDescription);
+      this.articleFg.get('nonComplianceCodeDescription').setValue(complCode.nonCompCodeDescription);
   }
 
   ngOnInit(): void {

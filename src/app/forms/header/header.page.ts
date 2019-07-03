@@ -23,7 +23,6 @@ export class HeaderPage implements OnInit {
   public preUnloadPhoto: any;
   private photoPageComponent = PhotoPage;
   private barcodePageComponent = BarcodePage;
-  private valid = false;
   attachments: Attachment[];
   outAttachments: Attachment[];
   attachReady = false;
@@ -42,9 +41,9 @@ export class HeaderPage implements OnInit {
     this.minDate = newdate.toISOString();
 
     this.headerFg = this.formBuilder.group({
-      buCodeRcv: [this.initdata.buCodeRcv],
-      buTypeRcv: [this.initdata.buTypeRcv],
-      buNameRcv: [this.initdata.buNameRcv],
+      buCodeRcv: [this.initdata.buCodeRcv, Validators.required],
+      buTypeRcv: [this.initdata.buTypeRcv, Validators.required],
+      buNameRcv: [this.initdata.buNameRcv, Validators.required],
       unloadDate: [this.initdata.unloadDate],
       csmNo: [this.initdata.csmNo, Validators.required],
       sealNo: [this.initdata.sealNo],
@@ -124,8 +123,7 @@ export class HeaderPage implements OnInit {
             }
         );
       }
-      this.valid = true;
-      this.navParams.get('callback')({ formData: this.headerFg.value, files, truckNoPhoto: truckNoPhotoAttach, preUnloadPhoto: preUnloadPhotoAttach, valid: this.valid });
+      this.navParams.get('callback')({ formData: this.headerFg.value, files, truckNoPhoto: truckNoPhotoAttach, preUnloadPhoto: preUnloadPhotoAttach, valid: this.headerFg.valid });
   }
 
   ngOnInit(): void {

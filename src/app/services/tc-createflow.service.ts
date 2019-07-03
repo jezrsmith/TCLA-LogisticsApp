@@ -52,14 +52,17 @@ export class CreateflowService {
                             const docs$ = this.createDocUploadRequests(documents, resp.caseReference, sandboxId);
                             if (docs$.length > 0) {
                                 statusMessage.message = 'Uploading images...';
+                                return forkJoin(docs$)
+                                    .pipe(
+                                        map(responses => {
+                                            this.loadingController.dismiss({caseId: resp.caseReference, caseIdentifier: resp.caseIdentifier});
+                                            return resp.caseReference;
+                                        })
+                                    );
+                            } else {
+                                this.loadingController.dismiss({caseId: resp.caseReference, caseIdentifier: resp.caseIdentifier});
+                                return of(resp.caseReference);
                             }
-                            return forkJoin(docs$)
-                                .pipe(
-                                    map(responses => {
-                                        this.loadingController.dismiss({caseId: resp.caseReference, caseIdentifier: resp.caseIdentifier});
-                                        return resp.caseReference;
-                                    })
-                                );
                         })
                     );
             })
