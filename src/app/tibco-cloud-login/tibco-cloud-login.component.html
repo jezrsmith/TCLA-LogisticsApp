@@ -1,20 +1,29 @@
-<ion-content color="primary">
+<ion-header class="hidden-header"><ion-toolbar></ion-toolbar></ion-header>
+<ion-content>
+    <div style="margin-top: 50px; margin-left: 10px; margin-right: 10px">
+        <ion-img src="assets/img/tib-logo.svg"></ion-img>
+        <div style="margin: 20px">
+            <ion-text>Please provide your <b>TIBCO Cloud Live Apps&trade;</b> login credentials</ion-text>
+        </div>
+    </div>
     <form #form (ngSubmit)="login(form)">
         <ion-grid>
-            <ion-row color="primary" justify-content-center>
+            <ion-row color="" justify-content-center>
                 <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
-                    <div text-center>
-                        <h3>Login</h3>
-                    </div>
                     <div padding>
                         <ion-item>
+                            <ion-icon slot="start" name="person" size="small"></ion-icon>
                             <ion-input name="email" type="email" placeholder="your@email.com" value="" ngModel required></ion-input>
                         </ion-item>
                         <ion-item>
+                            <ion-icon slot="start" name="lock" size="small"></ion-icon>
                             <ion-input name="password" type="password" placeholder="Password" value="" ngModel required></ion-input>
+                            <ion-icon slot="end" name="eye" size="small"></ion-icon>
                         </ion-item>
                         <ion-item>
-                            <ion-input name="clientId" type="text" placeholder="client Id" value="" ngModel required></ion-input>
+                            <ion-icon slot="start" name="key" size="small"></ion-icon>
+                            <ion-input name="clientId" type="password" placeholder="client Id" value="" ngModel required></ion-input>
+                            <ion-icon slot="end" name="eye" size="small"></ion-icon>
                         </ion-item>
                     </div>
                     <div padding>
@@ -22,8 +31,9 @@
                     </div>
                 </ion-col>
             </ion-row>
-            <span *ngIf="loggingIn">Logging in...</span>
-            <span *ngIf="loginError">{{loginError}}</span>
+            <ion-text color="secondary" *ngIf="loggingIn">Logging in...</ion-text>
+            <ion-text color="danger" *ngIf="loginError">{{loginError}}</ion-text>
+            <p style="margin-top: 30px; margin-left: 10px; margin-right: 10px; font-size:12px">Copyright &#169; 2017 - 2018 TIBCO Software Inc. All rights reserved.</p>
         </ion-grid>
     </form>
 </ion-content>

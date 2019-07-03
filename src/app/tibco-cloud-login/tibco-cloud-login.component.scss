@@ -1,9 +1,9 @@
-ion-item{
-  --background: #3880ff;
-  --color: #fff;
+ion-header.hidden-header {
+  max-height: 0px;
 }
-ion-button{
-  --background: #062f77;
+
+.hidden-header ion-toolbar{
+  max-height: 0px;
 }
 
 

@@ -8,6 +8,7 @@ import {TcDocumentService} from './tc-document.service';
 import {of} from 'rxjs/internal/observable/of';
 import {flatMap, map} from 'rxjs/operators';
 import {LoadingController} from '@ionic/angular';
+import {ArticleInfo} from '../models/article';
 
 export const sandboxId = 3534;
 export const appId = '3296';
@@ -21,7 +22,7 @@ export class CreateflowService {
     constructor(private loadingController: LoadingController, private processService: TcCaseProcessesService, private docService: TcDocumentService) {
     }
 
-    public createCase(data: any, documents: any[]): Observable<string> {
+    public createCase(header: any, articles: any, data: any, documents: any): Observable<string> {
         /* This service does the following:
         - displays notification that reporting is being created
         - calls processes service to create a new Live Apps Case
