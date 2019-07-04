@@ -64,7 +64,7 @@
                     <ion-label position="floating">Damage Type <span style="font-style: italic; font-size: 12px">- Optional</span></ion-label>
                     <ion-select placeholder="Select One" formControlName="damageType">
                         <ion-select-option *ngFor="let damageType of damageTypes"
-                                           [value]="damageType.damageTypeCode">{{damageType.damageTypeCode}}
+                                           [value]="(damageType.damageTypeCode + ' - ' + damageType.damageTypeDescription)">{{damageType.damageTypeCode}}
                             - {{damageType.damageTypeDescription}}</ion-select-option>
                     </ion-select>
                 </ion-item>

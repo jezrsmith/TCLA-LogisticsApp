@@ -32,7 +32,7 @@
         <ion-item-sliding #csmNoSliding>
             <ion-item slot="start">
                 <ion-label position="floating">CSM No</ion-label>
-                <ion-input  type="text" formControlName="csmNo" required></ion-input>
+                <ion-input  type="number" formControlName="csmNo" required></ion-input>
                 <ion-button slot="end" fill="clear" (click)="openScanner('csmNo')">
                     <ion-icon slot="icon-only" name="barcode"></ion-icon>
                 </ion-button>
@@ -40,22 +40,21 @@
         </ion-item-sliding>
         <ion-item>
             <ion-label position="floating">Seal No <span style="font-style: italic; font-size: 12px">- Optional</span></ion-label>
-            <ion-input type="text" formControlName="sealNo"></ion-input>
+            <ion-input type="number" formControlName="sealNo"></ion-input>
         </ion-item>
-        <ion-item>
-            <ion-label position="floating">SL Time</ion-label>
-            <ion-input type="text" formControlName="slTime" readonly></ion-input>
+        <ion-item *ngIf="headerFg.get('slTime').value">
+            <ion-label position="floating">SL Time <span style="font-style: italic; font-size: 12px">- minutes</span></ion-label>
+            <ion-input type="number" formControlName="slTime" readonly></ion-input>
         </ion-item>
         <ion-item-sliding #truckNoSliding>
             <ion-item-options side="start">
-                <!--ion-item-option *ngIf="truckNoPhoto" (click)="openPhoto('truckNoPhoto', truckNoSliding);this.close()">Replace</ion-item-option-->
                 <ion-item-option *ngIf="truckNoPhoto" color="danger"
                                  (click)="clearImage('truckNoPhoto', truckNoSliding);">Clear
                 </ion-item-option>
             </ion-item-options>
             <ion-item text-wrap>
                 <ion-thumbnail (click)="openPhoto('truckNoPhoto')" *ngIf="truckNoPhoto" slot="end">
-                    <img *ngIf="truckNoPhoto" [src]="truckNoPhoto">
+                    <img *ngIf="truckNoPhoto" [src]="truckNoPhoto.webPath">
                 </ion-thumbnail>
                 <ion-button *ngIf="!truckNoPhoto" slot="end" fill="clear" (click)="openPhoto('truckNoPhoto')">
                     <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
@@ -74,7 +73,7 @@
             </ion-item-options>
             <ion-item text-wrap>
                 <ion-thumbnail (click)="openPhoto('preUnloadPhoto')" *ngIf="preUnloadPhoto" slot="end">
-                    <img *ngIf="preUnloadPhoto" [src]="preUnloadPhoto">
+                    <img *ngIf="preUnloadPhoto" [src]="preUnloadPhoto.webPath">
                 </ion-thumbnail>
                 <ion-button *ngIf="!preUnloadPhoto" slot="end" fill="clear" (click)="openPhoto('preUnloadPhoto')">
                     <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>

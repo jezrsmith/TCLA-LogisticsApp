@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { Tab1Page } from './tab1.page';
+import { ReportTabPage } from './report-tab.page';
 import {PhotoPage} from '../photo/photo.page';
 import {CreateflowComponent} from '../createflow/createflow.component';
 import {BarcodePage} from '../barcode/barcode.page';
@@ -20,12 +20,12 @@ import {ArticlePage} from '../forms/article/article.page';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild([{path: '', resolve: { receiverDetails: ReceiverDetailsResolver }, component: Tab1Page}])
+    RouterModule.forChild([{path: '', resolve: { receiverDetails: ReceiverDetailsResolver }, component: ReportTabPage}])
   ],
   providers: [
       ReceiverDetailsResolver
   ],
-  declarations: [Tab1Page, PhotoPage, BarcodePage, QrcodePage, DatafieldsPage, HeaderPage, ArticlePage, AttachmentsPage, CreateflowComponent],
+  declarations: [ReportTabPage, PhotoPage, BarcodePage, QrcodePage, DatafieldsPage, HeaderPage, ArticlePage, AttachmentsPage, CreateflowComponent],
   entryComponents: [PhotoPage, BarcodePage, QrcodePage, DatafieldsPage, HeaderPage, ArticlePage, AttachmentsPage, CreateflowComponent]
 })
-export class Tab1PageModule {}
+export class ReportTabPageModule {}

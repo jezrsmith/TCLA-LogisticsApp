@@ -36,7 +36,7 @@ export class TcCaseProcessesService {
         }
 
         this.nativeHttp.setDataSerializer('json');
-        console.log('Calling post to create process:');
+        console.log('Calling post to create process:', body);
         return from(this.nativeHttp.post(url, body, {'Content-Type': 'application/json'})
             .then(response => {
                 console.log('response frm processes call:', response);

@@ -5,6 +5,7 @@ export interface Deserializable {
 export class Attachment implements Deserializable {
     type: string;
     file: any;
+    path: any;
     description: string;
     deserialize(input: any) {
         Object.assign(this, input);

@@ -17,6 +17,15 @@ export class LoginContext implements Deserializable {
   }
 }
 
+export class Credentials implements Deserializable {
+  username: string;
+  clientId: string;
+  deserialize(input: any) {
+    Object.assign(this, input);
+    return this;
+  }
+}
+
 export class AccessToken implements Deserializable {
   access_token: string;
   token_type: string;

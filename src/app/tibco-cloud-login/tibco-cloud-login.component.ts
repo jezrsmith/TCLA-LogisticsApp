@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {TcLoginService} from '../services/tc-login.service';
-import {AccountsInfo, AuthInfo} from '../models/tc-login';
+import {AccountsInfo, AuthInfo, Credentials} from '../models/tc-login';
 import {TcOrganizationService} from '../services/tc-organization.service';
 
 /**
@@ -28,6 +28,9 @@ export class TibcoCloudLoginComponent {
     clientId: string;
     loggingIn = false;
     loginError: string;
+    savedCredentials: any;
+    public passInputType = 'password';
+    public clientIdInputType = 'password';
 
   /**
   * The Constructor creates the Login Dialog
@@ -36,7 +39,13 @@ export class TibcoCloudLoginComponent {
     private tcLogin: TcLoginService,
     private tcOrg: TcOrganizationService
   ) {
-
+      const savedCredentials: Credentials = localStorage.getItem('reportingApp_Credentials') ? JSON.parse(localStorage.getItem('reportingApp_Credentials')) : undefined;
+      if (savedCredentials.username && savedCredentials.username !== '') {
+          this.name = savedCredentials.username;
+      }
+      if (savedCredentials.clientId  && savedCredentials.clientId !== '') {
+          this.clientId = savedCredentials.clientId;
+      }
   }
 
   claims() {
@@ -51,6 +60,14 @@ export class TibcoCloudLoginComponent {
       );
   }
 
+    public toggleVisible(inpAttr: string) {
+        if (this[inpAttr] === 'password') {
+            this[inpAttr] = 'text';
+        } else {
+            this[inpAttr] = 'password';
+        }
+    }
+
   login(form) {
         this.loginError = undefined;
         this.loggingIn = true;
@@ -60,6 +77,13 @@ export class TibcoCloudLoginComponent {
             this.loggingIn = false;
             // ok logged in
             console.log('User logged in...');
+            // save credentials
+            localStorage.setItem('reportingApp_Credentials', JSON.stringify(new Credentials().deserialize(
+                {
+                    username: this.name,
+                    clientId: this.clientId
+                }
+            )));
             this.loggedIn.emit(new AuthInfo().deserialize(next));
           },
           error => {

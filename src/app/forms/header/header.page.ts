@@ -20,6 +20,7 @@ export class HeaderPage implements OnInit {
   private initdata: any;
   private passedData: any;
   public truckNoPhoto: any;
+  public truckNoName: string;
   public preUnloadPhoto: any;
   private photoPageComponent = PhotoPage;
   private barcodePageComponent = BarcodePage;
@@ -50,10 +51,10 @@ export class HeaderPage implements OnInit {
       slTime: [this.initdata.slTime]
     });
     if (this.passedData.preUnloadPhoto) {
-      this.preUnloadPhoto = this.passedData.preUnloadPhoto.file;
+      this.preUnloadPhoto = this.passedData.preUnloadPhoto;
     }
     if (this.passedData.truckNoPhoto) {
-      this.truckNoPhoto = this.passedData.truckNoPhoto.file;
+      this.truckNoPhoto = this.passedData.truckNoPhoto;
     }
     if (this.passedData.files && this.passedData.files.length > 0) {
       this.attachments = this.passedData.files;
@@ -69,7 +70,10 @@ export class HeaderPage implements OnInit {
 
   photoCallback = data => {
     if (data.photo) {
-      this[data.attribName] = this.sanitizer.bypassSecurityTrustUrl(data.photo.webPath);
+      this[data.attribName] = {
+        webPath: this.sanitizer.bypassSecurityTrustUrl(data.photo.webPath),
+        path: data.photo.path
+      };
     }
   }
 
@@ -85,7 +89,7 @@ export class HeaderPage implements OnInit {
 
   scannerCallback = (attribName: string, scannedData: Barcode) => {
     if (scannedData.cancelled !== 1) {
-      this.headerFg.get(attribName).setValue(scannedData.text);
+      this.headerFg.get(attribName).setValue(Number(scannedData.text));
     }
   }
 
@@ -108,7 +112,8 @@ export class HeaderPage implements OnInit {
         truckNoPhotoAttach = new Attachment().deserialize(
             {
               type: 'photo',
-              file: this.truckNoPhoto,
+              file: this.truckNoPhoto.webPath,
+              path: this.truckNoPhoto.path,
               description: 'LU_Number'
             }
         );
@@ -118,8 +123,9 @@ export class HeaderPage implements OnInit {
         preUnloadPhotoAttach = new Attachment().deserialize(
             {
               type: 'photo',
-              file: this.truckNoPhoto,
-              description: 'LU_Number'
+              file: this.truckNoPhoto.webPath,
+              path: this.truckNoPhoto.path,
+              description: 'Pre-unload'
             }
         );
       }

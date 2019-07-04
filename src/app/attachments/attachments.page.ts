@@ -36,7 +36,7 @@ export class AttachmentsPage implements OnInit, OnChanges {
 
         console.log('prepush:', this.attachments);
         this.attachments.push(attachment);
-        this.imagePreviews.push(this.sanitizer.bypassSecurityTrustUrl(attachment.file.webPath));
+        this.imagePreviews.push(attachment.file);
         console.log('pushed:', attachment);
         this.attachmentsChanges.emit(this.attachments);
     }
@@ -46,12 +46,13 @@ export class AttachmentsPage implements OnInit, OnChanges {
             this.addImage(new Attachment().deserialize(
                 {
                     type: 'photo',
-                    file: data.photo,
+                    file: this.sanitizer.bypassSecurityTrustUrl(data.photo.webPath),
+                    path: data.photo.path,
                     description: data.photo.path.substr(data.photo.path.lastIndexOf('/') + 1)
                 })
             );
         }
-    };
+    }
 
     openPhoto() {
         this.navCtrl.push(this.photoPageComponent, {

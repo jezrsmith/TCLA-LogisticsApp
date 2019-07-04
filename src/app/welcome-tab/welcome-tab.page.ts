@@ -9,11 +9,11 @@ import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-sca
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+  selector: 'welcome-tab',
+  templateUrl: 'welcome-tab.page.html',
+  styleUrls: ['welcome-tab.page.scss']
 })
-export class Tab2Page implements OnInit {
+export class WelcomeTabPage implements OnInit {
 
   coords: Coordinates = null;
   photo: SafeResourceUrl;

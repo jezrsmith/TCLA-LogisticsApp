@@ -27,7 +27,7 @@ import {from} from 'rxjs/internal/observable/from';
 export const EMAIL_ID_KEY = 'tcs-login-email-id';
 export const CLIENT_ID_KEY = 'tcs-login-client-id';
 export const OAUTH_URL = 'https://sso-ext.tibco.com';
-export const LIVE_APPS_URL = 'https://liveapps.cloud.tibco.com';
+export const LIVE_APPS_URL = 'https://eu.liveapps.cloud.tibco.com';
 
 @Injectable({
   providedIn: 'root'

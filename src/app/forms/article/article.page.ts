@@ -99,7 +99,7 @@ export class ArticlePage implements OnInit {
 
   scannerCallback = (attribName: string, scannedData: Barcode) => {
     if (scannedData.cancelled !== 1) {
-      this.articleFg.get(attribName).setValue(scannedData.text);
+      this.articleFg.get(attribName).setValue(Number(scannedData.text));
       if (attribName === 'itemNo') {
         this.logisticsService.getArticleDetailsByNumberNative(Number(scannedData.text))
             .subscribe(

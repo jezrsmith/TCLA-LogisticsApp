@@ -13,17 +13,17 @@
                     <div padding>
                         <ion-item>
                             <ion-icon slot="start" name="person" size="small"></ion-icon>
-                            <ion-input name="email" type="email" placeholder="your@email.com" value="" ngModel required></ion-input>
+                            <ion-input name="email" type="email" placeholder="your@email.com" [(ngModel)]="name" required></ion-input>
                         </ion-item>
                         <ion-item>
                             <ion-icon slot="start" name="lock" size="small"></ion-icon>
-                            <ion-input name="password" type="password" placeholder="Password" value="" ngModel required></ion-input>
-                            <ion-icon slot="end" name="eye" size="small"></ion-icon>
+                            <ion-input name="password" [type]="passInputType" placeholder="password" [(ngModel)]="password" required></ion-input>
+                            <ion-icon slot="end" name="eye" size="small" (click)="toggleVisible('passInputType')"></ion-icon>
                         </ion-item>
                         <ion-item>
                             <ion-icon slot="start" name="key" size="small"></ion-icon>
-                            <ion-input name="clientId" type="password" placeholder="client Id" value="" ngModel required></ion-input>
-                            <ion-icon slot="end" name="eye" size="small"></ion-icon>
+                            <ion-input name="clientId" [type]="clientIdInputType" placeholder="client Id" [(ngModel)]="clientId" required></ion-input>
+                            <ion-icon slot="end" name="eye" size="small" (click)="toggleVisible('clientIdInputType')"></ion-icon>
                         </ion-item>
                     </div>
                     <div padding>
@@ -33,7 +33,8 @@
             </ion-row>
             <ion-text color="secondary" *ngIf="loggingIn">Logging in...</ion-text>
             <ion-text color="danger" *ngIf="loginError">{{loginError}}</ion-text>
-            <p style="margin-top: 30px; margin-left: 10px; margin-right: 10px; font-size:12px">Copyright &#169; 2017 - 2018 TIBCO Software Inc. All rights reserved.</p>
+            <p style="margin-top: 30px; margin-left: 10px; margin-right: 10px; font-size:12px" text-center>Powered by <b>TIBCO LABS&trade;</b> <ion-icon size='large' src="assets/icon/tibco-labs.svg"></ion-icon></p>
+            <p style="margin-top: 30px; margin-left: 10px; margin-right: 10px; font-size:12px" text-center>Copyright &#169; 2019 TIBCO Software Inc. All rights reserved.</p>
         </ion-grid>
     </form>
 </ion-content>

@@ -7,7 +7,6 @@ import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ng
 // import { File } from '@ionic-native/file';
 import { LIVE_APPS_URL } from './tc-login.service';
 import {of} from 'rxjs/internal/observable/of';
-export const sandboxId = 3534;
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +16,7 @@ export class TcDocumentService {
     constructor(private http: HttpClient, private nativeHttp: HTTP, private transfer: FileTransfer) {
     }
 
-    public uploadDocumentNative(folderType: string, folderId: string, sandbox: number,
+    public uploadDocumentNative(folderType: string, folderId: string, sandboxId: number,
                                 fileToUpload: any, fileName: string, description: string): Observable<any> {
         let url = LIVE_APPS_URL + '/webresource/v1/' + folderType
             + '/' + folderId
