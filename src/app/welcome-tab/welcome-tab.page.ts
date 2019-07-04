@@ -26,7 +26,7 @@ export class WelcomeTabPage {
 
     @HostListener('window:resize')
     public onResize() {
-        if (this.platform.is('ios')) {
+        if (this.platform.is('ios') || this.platform.is('android')) {
             setTimeout(() => {
                 if (this.welcomeSlides) {
                     this.welcomeSlides.update();
