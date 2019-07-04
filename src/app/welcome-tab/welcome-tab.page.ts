@@ -14,7 +14,8 @@ import {IonSlides, Platform} from '@ionic/angular';
 export class WelcomeTabPage {
 
     slideOpts = {
-        pager: true
+        pager: true,
+        autoplay: false
     };
 
   constructor(private router: Router, public platform: Platform) {}
