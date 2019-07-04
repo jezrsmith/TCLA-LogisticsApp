@@ -4,7 +4,7 @@
             Article
         </ion-title>
         <ion-buttons slot="start">
-            <ion-back-button (click)="passData()" defaultHref="/"></ion-back-button>
+            <ion-back-button (click)="passData()" defaultHref="/tabs/report-tab"></ion-back-button>
         </ion-buttons>
         <ion-icon *ngIf="articleFg.valid" slot="end" color="success" name="checkmark-circle-outline"></ion-icon>
         <ion-icon *ngIf="!articleFg.valid" slot="end" color="danger" name="close-circle-outline"></ion-icon>

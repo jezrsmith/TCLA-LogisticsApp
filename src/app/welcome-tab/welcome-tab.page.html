@@ -1,10 +1,24 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Configuration
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-  <ion-content>
-    <ion-text> CONFIG PAGE </ion-text>
-  </ion-content>
+<ion-content>
+  <ion-slides [options]="slideOpts" pager="true" #welcomeSlides>
+    <ion-slide>
+      <ion-img src="assets/img/slide-1.png"></ion-img>
+          <h2>Welcome to the <b>Logistics Reporting App</b></h2>
+          <p>This application can be used to quickly report issues when unloading deliveries</p>
+    </ion-slide>
+    <ion-slide>
+      <ion-img src="assets/img/slide-2.png"></ion-img>
+      <h2>Use your handset to quickly record deviations</h2>
+      <p>Loading unit (header) and package (article) data can be quickly recording using your handset</p>
+    </ion-slide>
+    <ion-slide>
+      <ion-img src="assets/img/slide-3.png"></ion-img>
+      <h2><b>Scan</b> rather than type to record package details!</h2>
+      <p>You can also upload photo attachments to record damage</p>
+    </ion-slide>
+    <ion-slide>
+      <ion-img src="assets/img/slide-4.png"></ion-img>
+      <h2>Ready to file a report?</h2>
+      <ion-button fill="clear" (click)="fileReport()">Get started<ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
