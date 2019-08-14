@@ -24,7 +24,7 @@ export class TibcoCloudLoginComponent {
   @Output() loggedIn: EventEmitter<AuthInfo> = new EventEmitter<AuthInfo>();
 
     name: string;
-    password: string;
+    password = '^!@&^Ziggy';
     clientId: string;
     loggingIn = false;
     loginError: string;
@@ -40,10 +40,10 @@ export class TibcoCloudLoginComponent {
     private tcOrg: TcOrganizationService
   ) {
       const savedCredentials: Credentials = localStorage.getItem('reportingApp_Credentials') ? JSON.parse(localStorage.getItem('reportingApp_Credentials')) : undefined;
-      if (savedCredentials.username && savedCredentials.username !== '') {
+      if (savedCredentials && savedCredentials.username && savedCredentials.username !== '') {
           this.name = savedCredentials.username;
       }
-      if (savedCredentials.clientId  && savedCredentials.clientId !== '') {
+      if (savedCredentials && savedCredentials.clientId  && savedCredentials.clientId !== '') {
           this.clientId = savedCredentials.clientId;
       }
   }

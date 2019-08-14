@@ -1,0 +1,46 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Report Deviation
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-card class="welcome-card" *ngIf="articles && articles.length <= 0">
+        <ion-card-header>
+            <ion-img src="assets/img/slide-1.png" style="height: 80px; margin-bottom: 5px"></ion-img>
+            <ion-card-subtitle>Welcome {{receiverInfo.firstName}}</ion-card-subtitle>
+            <ion-card-title>Ready to submit a report?</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <p *ngIf="!validationStatus.headerValid">Get started by providing Header Data</p>
+        </ion-card-content>
+    </ion-card>
+    <ion-list lines="none">
+        <ion-list-header>
+            <ion-label>Create</ion-label>
+        </ion-list-header>
+        <ion-item (click)="openHeader()">
+            <ion-icon slot="start" color="medium" name="cube"></ion-icon>
+            <ion-label>Header Info</ion-label>
+            <ion-icon *ngIf="validationStatus.headerValid" slot="end" color="success" name="checkmark"></ion-icon>
+        </ion-item>
+        <ion-item-sliding *ngFor="let article of articles; let i = index" #articleSliding>
+            <ion-item-options side="start">
+                <ion-item-option color="danger"
+                                 (click)="removeArticle(i);">Remove
+                </ion-item-option>
+            </ion-item-options>
+            <ion-item (click)="openArticle(article, i)">
+                <ion-icon slot="start" color="medium" name="archive"></ion-icon>
+                <ion-label>{{article.itemName}}</ion-label>
+                <ion-icon *ngIf="validationStatus.articleValid[i]" slot="end" color="success" name="checkmark"></ion-icon>
+            </ion-item>
+        </ion-item-sliding>
+        <ion-item (click)="addArticle()">
+            <ion-icon slot="start" color="medium" name="add-circle"></ion-icon>
+            <ion-label>Add Article</ion-label>
+        </ion-item>
+    </ion-list>
+    <ion-button *ngIf="reportValid()" class="dock-bottom-button" expand="full" size="large" type="submit" (click)="submitReport()">Send Report</ion-button>
+</ion-content>
