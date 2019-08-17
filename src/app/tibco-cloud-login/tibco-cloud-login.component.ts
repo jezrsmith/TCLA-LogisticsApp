@@ -24,7 +24,7 @@ export class TibcoCloudLoginComponent {
   @Output() loggedIn: EventEmitter<AuthInfo> = new EventEmitter<AuthInfo>();
 
     name: string;
-    password = '^!@&^Ziggy';
+    password = '';
     clientId: string;
     loggingIn = false;
     loginError: string;
