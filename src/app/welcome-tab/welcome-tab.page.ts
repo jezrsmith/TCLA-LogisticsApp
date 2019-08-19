@@ -2,7 +2,6 @@ import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {CameraResultType, CameraSource, Plugins} from '@capacitor/core';
 const { Geolocation, Modals } = Plugins;
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
-import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import {Router} from '@angular/router';
 import {IonSlides, Platform} from '@ionic/angular';
 

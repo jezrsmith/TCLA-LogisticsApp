@@ -18,11 +18,6 @@
   </feature>
 
 
-  <feature name="QRScanner">
-    <param name="ios-package" value="QRScanner"/>
-  </feature>
-
-
   <feature name="BarcodeScanner">
     <param name="ios-package" value="CDVBarcodeScanner"/>
   </feature>

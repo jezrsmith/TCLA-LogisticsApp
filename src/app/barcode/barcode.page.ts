@@ -6,7 +6,6 @@ import {map} from 'rxjs/operators';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 const { Geolocation, Modals } = Plugins;
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
-import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import {IonNav, NavController, NavParams} from '@ionic/angular';
 import {Barcode} from '../models/barcode';
 

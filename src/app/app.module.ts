@@ -9,7 +9,6 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner/ngx';
-import {QRScanner} from '@ionic-native/qr-scanner/ngx';
 import {TcCaseService} from './services/tc-case.service';
 import {TcCommonFunctions} from './services/tc-common-functions';
 import {TcOrganizationService} from './services/tc-organization.service';
@@ -43,7 +42,6 @@ import {LogisticsService} from './services/logistics.service';
         StatusBar,
         SplashScreen,
         BarcodeScanner,
-        QRScanner,
         HTTP,
         FileTransfer,
         WebView,
